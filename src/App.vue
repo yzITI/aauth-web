@@ -6,4 +6,10 @@
 </script>
 
 <style>
+* {
+  outline: none;
+}
+body {
+  margin: 0;
+}
 </style>
