@@ -41,7 +41,7 @@ const pts = computed(() => {
 const SS = window.sessionStorage, LS = window.localStorage
 if (SS[id] || LS[id]) {
   if (!SS[id]) SS[id] = LS[id]
-  router.push('/explode/' + id, { query: { state } })
+  router.push(`/explode/${id}?state=${state}`)
 } else axios.get('/app/' + id)
   .then(({ data }) => { app = data })
   .catch(err => {

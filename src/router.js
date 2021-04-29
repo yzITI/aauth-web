@@ -17,6 +17,10 @@ const routes = [
     path: '/explode/:id',
     component: () => import('./views/Explode.vue')
   },
+  {
+    path: '/admin',
+    component: () => import('./views/Admin.vue')
+  }
 ]
 
 const router = createRouter({ history: createWebHashHistory(), routes }) 

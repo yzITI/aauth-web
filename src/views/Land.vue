@@ -48,7 +48,7 @@ function jump () {
   const SS = window.sessionStorage, LS = window.localStorage
   SS[app] = token
   if (remember) LS[app] = token
-  router.push('/explode/' + app, { query: { state: state || '' } })
+  router.push(`/explode/${app}?state=${state}`)
 }
 </script>
 
