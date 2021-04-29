@@ -14,7 +14,7 @@ const routes = [
     component: () => import('./views/Land.vue')
   },
   {
-    path: '/explode',
+    path: '/explode/:id',
     component: () => import('./views/Explode.vue')
   },
 ]

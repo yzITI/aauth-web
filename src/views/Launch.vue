@@ -32,13 +32,17 @@ ref: tip = '正在载入应用信息'
 const pts = computed(() => {
   if (!app || !app.platforms) return platforms
   const res = []
-  for (const p of platforms) {
-    if (app.platforms.split(',').includes(p.key)) res.push(p)
+  for (const p of app.platforms.split(',')) {
+    if (platforms[p]) res.push(platforms[p])
   }
   return res
 })
 
-axios.get('/app/' + id)
+const SS = window.sessionStorage, LS = window.localStorage
+if (SS[id] || LS[id]) {
+  if (!SS[id]) SS[id] = LS[id]
+  router.push('/explode/' + id, { query: { state } })
+} else axios.get('/app/' + id)
   .then(({ data }) => { app = data })
   .catch(err => {
     tip = err.response ? err.response.data.toString() : '网络错误'
@@ -46,7 +50,7 @@ axios.get('/app/' + id)
 
 function go (p) {
   if (!app) return
-  p.go(state)
+  p.go(id, state)
 }
 </script>
 
