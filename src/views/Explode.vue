@@ -24,9 +24,9 @@ else axios.get('/auth/' + id, { headers: { token: SS[id] } })
   })
   .catch(err => {
     tip = err.response ? err.response.data : '网络错误'
-    delete LS[id]
     delete SS[id]
-    router.push('/launch/' + id)
+    delete LS[id]
+    if (route.query.remember) router.push('/launch/' + id)
   })
 </script>
 

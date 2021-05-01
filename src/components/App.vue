@@ -83,12 +83,13 @@ async function submit () {
   await axios.post('/app/' + app.id, body, { headers: { token: window.sessionStorage.aauth } })
     .then(({ data }) => {
       app = data
+      console.log(data)
       Swal.fire('成功', '应用信息提交成功', 'success')
     })
     .catch(err => {
       Swal.fire('错误', err.response ? err.response.data : '网络错误', 'error')
     })
-  emit('upsert', app)
+  emit('upsert', {...app})
   loading = false
 }
 

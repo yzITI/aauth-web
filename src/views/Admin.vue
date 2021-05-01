@@ -6,8 +6,8 @@
         <h2 class="title is-4 m-3">应用列表</h2>
         <button class="button is-info is-outlined is-fullwidth is-small" @click="select()">创建应用</button>
         <div class="app m-2" v-for="(a, id) in apps" @click="select(id)">
-          <img style="max-width: 2rem; max-height: 2rem;" :src="a.icon || '/logo.png'" onerror="this.src = '/logo.png'">
-          <h3 class="title is-6">{{ a.name }}</h3>
+          <img style="max-width: 1.8rem; max-height: 1.8rem;" :src="a.icon || '/logo.png'" onerror="this.src = '/logo.png'">
+          <h3 class="title is-6 ml-2">{{ a.name }}</h3>
         </div>
       </div>
       <div class="edit p-2">
