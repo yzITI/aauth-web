@@ -43,7 +43,10 @@ if (SS[id] || LS[id]) {
   if (!SS[id]) SS[id] = LS[id]
   router.push(`/explode/${id}?state=${state}&remember=1`)
 } else axios.get('/app/' + id)
-  .then(({ data }) => { app = data })
+  .then(({ data }) => {
+    if (!data.redirect) tip = '应用不支持登录'
+    else app = data
+  })
   .catch(err => {
     tip = err.response ? err.response.data.toString() : '网络错误'
   })
