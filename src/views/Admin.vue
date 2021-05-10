@@ -11,11 +11,13 @@
         </div>
       </div>
       <div class="edit p-2">
-        <h1 class="title m-3">
-          <i v-if="width <= 640" class="mdi mdi-24px mdi-menu" @click="open = !open"></i>
-          {{ edit ? '应用管理' : ''}}
-        </h1>
-        <app v-if="edit" :app="edit" @upsert="upsert" @remove="remove"></app>
+        <div style="min-width: 300px;">
+          <h1 class="title m-3">
+            <i v-if="width <= 640" class="mdi mdi-24px mdi-menu" @click="open = !open"></i>
+            {{ edit ? '应用管理' : ''}}
+          </h1>
+          <app v-if="edit" :app="edit" @upsert="upsert" @remove="remove"></app>
+        </div>
       </div>
     </div>
   </div>
@@ -107,8 +109,5 @@ div.edit {
   height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
-}
-div.edit * {
-  min-width: 300px;
 }
 </style>
