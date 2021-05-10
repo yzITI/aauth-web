@@ -20,19 +20,15 @@
     <div class="buttons m-3">
       <button class="button is-info" :class="{ 'is-loading': loading }" @click="submit" :disabled="!app.name">提交</button>
       <button class="button is-danger" @click="remove"  :class="{ 'is-loading': loading }">删除</button>
-      <button class="button is-warning" @click="help">查看重要说明</button>
     </div>
-    <div v-if="app.pk">
-      <label class="label">pk (public key)</label>
-      <textarea :value="app.pk" rows="9" readonly="true"></textarea>
-    </div>
-    <div v-if="app.sk">
-      <label class="label">sk (private key) CREDENTIAL</label>
-      <textarea :value="app.sk" rows="9" readonly="true"></textarea>
-    </div>
-    <div v-if="app.secret">
-      <label class="label">secret CREDENTIAL</label>
-      <textarea :value="app.secret" rows="2" readonly="true"></textarea>
+    <p class="m-3">只有<b>刷新</b>secret或者RSA密钥对以后，才可以查看最新secret或sk。关闭此页后将无法再次查看!</p>
+    <input type="hidden" id="pk" :value="app.pk">
+    <input type="hidden" id="sk" :value="app.sk">
+    <input type="hidden" id="secret" :value="app.secret">
+    <div class="buttons m-2">
+      <button class="button is-success is-light mb-2" v-if="app.pk" @click="copy('#pk')">点击复制public key</button>
+      <button class="button is-warning is-light mb-2" v-if="app.sk" @click="copy('#sk')">点击复制private key</button>
+      <button class="button is-danger is-light mb-2" v-if="app.secret" @click="copy('#secret')">点击复制secret</button>
     </div>
   </div>
 </template>
@@ -55,10 +51,6 @@ const properties = {
 }
 
 ref: loading = false
-function help () {
-  const help = '只有<b>刷新</b>secret或者RSA密钥对以后，才可以查看最新secret或sk。'
-  Swal.fire('重要帮助信息', help, 'info')
-}
 
 async function submit () {
   if (app.updateSecret || app.key) {
@@ -112,14 +104,22 @@ async function remove () {
   emit('remove', app)
   loading = false
 }
-</script>
 
-<style scoped>
-textarea {
-  font-family: monospace;
-  width: 100%;
-  border: none;
-  background-color: white;
-  padding: 0px;
+function copy (id) {
+  let testingCodeToCopy = document.querySelector(id)
+  testingCodeToCopy.setAttribute('type', 'text')
+  testingCodeToCopy.select()
+
+  try {
+    const successful = document.execCommand('copy')
+    const msg = successful ? 'successful' : 'unsuccessful'
+    swal.fire('复制成功', '', 'success')
+  } catch (err) {
+    swal.fire('复制失败', '', 'error')
+  }
+
+  /* unselect the range */
+  testingCodeToCopy.setAttribute('type', 'hidden')
+  window.getSelection().removeAllRanges()
 }
-</style>
+</script>
