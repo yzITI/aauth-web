@@ -24,7 +24,7 @@ By default, App has `id`, `secret`, and a pair of RSA keys (`sk` and `pk`).
 ### Step 1: Frontend Entry
 
 ```
-https://aauth.link/#/launch/:APPID[?state=STATE]
+https://cn.aauth.link/#/launch/:APPID[?state=STATE]
 ```
 
 ### Step 2: User Login
@@ -45,7 +45,7 @@ User is redirected to the `redirect` as in the App settings, with some parameter
 
 ### Step 4: Backend `code` Confirmation
 
-POST `/auth/` with following body parameters:
+POST `https://cn.api.aauth.link/auth/` with following body parameters:
 ```js
 {
   code: String, // code from Step 3
