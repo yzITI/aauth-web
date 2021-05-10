@@ -24,11 +24,13 @@
     </div>
     <div v-if="app.pk">
       <label class="label">pk (public key)</label>
-      <textarea :value="app.pk" rows="9" readonly="true"></textarea>
+      <button class="button is-success is-light mb-2" @click="copy('#pk')">复制</button>
+      <textarea id="pk" :value="app.pk" rows="9" readonly="true"></textarea>
     </div>
     <div v-if="app.sk">
       <label class="label">sk (private key) CREDENTIAL</label>
-      <textarea :value="app.sk" rows="9" readonly="true"></textarea>
+      <button class="button is-info" @click="copy('#sk')">复制</button>
+      <textarea id="sk" :value="app.sk" rows="9" readonly="true"></textarea>
     </div>
     <div v-if="app.secret">
       <label class="label">secret CREDENTIAL</label>
@@ -111,6 +113,24 @@ async function remove () {
     })
   emit('remove', app)
   loading = false
+}
+
+function copy (id) {
+  let testingCodeToCopy = document.querySelector(id)
+  testingCodeToCopy.setAttribute('type', 'text')
+  testingCodeToCopy.select()
+
+  try {
+    const successful = document.execCommand('copy')
+    const msg = successful ? 'successful' : 'unsuccessful'
+    swal.fire('Copied', '', 'success')
+  } catch (err) {
+    swal.fire('Failed', '', 'error')
+  }
+
+  /* unselect the range */
+  testingCodeToCopy.setAttribute('type', 'hidden')
+  window.getSelection().removeAllRanges()
 }
 </script>
 
