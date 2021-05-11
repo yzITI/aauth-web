@@ -36,6 +36,7 @@ axios.put('/auth/', { code, platform, app })
     user = data.info
     token = data.token
     appName = data.app
+    console.log('user id:', user.id)
   })
   .catch(err => {
     if (!err.response) tip = '网络错误'
