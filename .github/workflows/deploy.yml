@@ -26,6 +26,6 @@ jobs:
         access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
         access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
     - name: Delete Old assets
-      run: ossutil rm -rf oss://cn-aauth/assets/
+      run: ossutil rm -rf oss://njsc-fe/cn-aauth/
     - name: Upload files to OSS
-      run: ossutil cp -rf ./dist oss://cn-aauth/
+      run: ossutil cp -rf ./dist oss://njsc-fe/cn-aauth/
