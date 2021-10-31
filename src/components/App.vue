@@ -34,11 +34,11 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmit, watchEffect } from 'vue'
+import { defineProps, defineEmits, watchEffect } from 'vue'
 import axios from '../plugins/axios.js'
 const props = defineProps(['app'])
-const emit = defineEmit(['upsert', 'remove'])
-ref: app = props.app
+const emit = defineEmits(['upsert', 'remove'])
+let app = $ref(props.app)
 
 watchEffect(() => { app = props.app })
 
@@ -50,7 +50,7 @@ const properties = {
   token: ['令牌', '使用令牌登录，填写令牌模板']
 }
 
-ref: loading = false
+let loading = $ref(false)
 
 async function submit () {
   if (app.updateSecret || app.key) {

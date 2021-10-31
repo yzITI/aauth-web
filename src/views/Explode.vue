@@ -1,6 +1,6 @@
 <template>
-  <div class="explode">
-    <h1 class="title">{{ tip }}</h1>
+  <div class="h-screen w-screen flex justify-center items-center">
+    <h1 class="text-4xl font-bold">{{ tip }}</h1>
   </div> 
 </template>
 
@@ -10,7 +10,7 @@ import axios from '../plugins/axios.js'
 const route = useRoute(), router = useRouter()
 const id = route.params.id
 
-ref: tip = '正在请求跳转'
+let tip = $ref('正在请求跳转')
 const SS = window.sessionStorage, LS = window.localStorage
 
 if (!SS[id]) router.push('/launch/' + id)
@@ -29,14 +29,3 @@ else axios.get('/auth/' + id, { headers: { token: SS[id] } })
     if (route.query.remember) router.push('/launch/' + id)
   })
 </script>
-
-<style scoped>
-div.explode {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100vh;
-}
-</style>

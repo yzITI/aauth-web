@@ -2,9 +2,6 @@
   <router-view />
 </template>
 
-<script setup>
-</script>
-
 <style>
 * {
   outline: none;

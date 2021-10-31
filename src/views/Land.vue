@@ -1,14 +1,14 @@
 <template>
-  <div class="land flex-col">
-    <h3 v-if="!user" class="title is-3">{{ tip }}</h3>
+  <div class="h-screen w-screen flex flex-col justify-around items-center">
+    <h3 v-if="!user" class="text-3xl font-bold">{{ tip }}</h3>
     <template v-else>
-      <div class="flex-col">
-        <h1 class="title m-1">{{ user.name }}</h1>
+      <div class="flex flex-col">
+        <h1 class="text-3xl font-bold">{{ user.name }}</h1>
         <p>{{ platforms[user.platform].name }} 登录</p>
       </div>
-      <div class="flex-col">
-        <button class="button m-3 mt-5 is-info" style="width: 90vw; max-width: 320px;" @click="jump">点击前往 {{ appName }}</button>
-        <label class="checkbox">
+      <div class="flex flex-col items-center">
+        <button class="bg-red-700 rounded m-3 w-80 text-white px-5 py-2" @click="jump">点击前往 {{ appName }}</button>
+        <label>
           <input type="checkbox" v-model="remember">
           30天内自动登录此应用
         </label>
@@ -23,10 +23,10 @@ import axios from '../plugins/axios.js'
 import platforms from '../plugins/platforms.js'
 const route = useRoute(), router = useRouter()
 
-ref: tip = '正在登录'
-ref: user = null
-ref: appName = ''
-ref: remember = false
+let tip = $ref('正在登录')
+let user = $ref(null)
+let appName = $ref('')
+let remember = $ref(false)
 let token
 const code = route.query.code
 const [platform, app, state] = route.query.state.split('$$')
@@ -52,16 +52,3 @@ function jump () {
   router.push(`/explode/${app}?state=${state}`)
 }
 </script>
-
-<style scoped>
-div.land {
-  width: 100%;
-  height: 100vh;
-  justify-content: space-around;
-}
-div.flex-col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-</style>

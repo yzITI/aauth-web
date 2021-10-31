@@ -32,9 +32,9 @@ const route = useRoute(), router = useRouter()
 
 const SS = window.sessionStorage
 const token = () => ({ headers: { token: SS.aauth } })
-ref: apps = null
-ref: edit = null
-ref: open = true
+let apps = $ref(null)
+let edit = $ref(null)
+let open = $ref(true)
 const width = window.innerWidth
 const mainStyle = computed(() => (open || width > 640) ? '' : 'width: calc(100% + 240px); left: -240px;')
 
