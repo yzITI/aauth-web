@@ -26,6 +26,6 @@ else axios.get('/auth/' + id, { headers: { token: SS[id] } })
     tip = err.response ? err.response.data : '网络错误'
     delete SS[id]
     delete LS[id]
-    if (route.query.remember) router.push('/launch/' + id)
+    if (route.query.remember) setTimeout(() => { router.push('/launch/' + id) }, 800)
   })
 </script>
