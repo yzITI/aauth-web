@@ -1,34 +1,34 @@
 <template>
-  <code class="ml-3">{{ app.id }}</code>
-  <div class="form m-2">
-    <div class="is-flex is-align-items-center m-3">
-      <label class="label m-0" style="min-width: 3.5rem;">id: </label>
-      <input class="input is-small" type="text" readonly="true" :value="app.id">
+  <div class="m-2 w-screen">
+    <div class="m-3">
+      <label class="inline-block w-12">id: </label>
+      <input class="px-2 py-1 w-2/3 focus:ring-2" type="text" readonly="true" :value="app.id">
     </div>
-    <div class="is-flex is-align-items-center m-3" v-for="(n, p) in properties">
-      <label class="label m-0" style="min-width: 3.5rem;">{{ n[0] }}：</label>
-      <input class="input is-small" type="text" v-model="app[p]" :placeholder="n[1]">
+    <div class="m-3" v-for="(n, p) in properties">
+      <label class="inline-block w-12">{{ n[0] }}：</label>
+      <input class="px-2 py-1 w-2/3 focus:ring-2" type="text" v-model="app[p]" :placeholder="n[1]">
     </div>
-    <label class="checkbox ml-3">
+    <label class="ml-3">
       <input type="checkbox" v-model="app.updateSecret">
       <span style="color: red; margin: 8px;">刷新secret</span>
     </label>
-    <label class="checkbox ml-3">
+    <label class="ml-3">
       <input type="checkbox" v-model="app.key">
       <span style="color: red; margin: 8px;">刷新RSA密钥对</span>
     </label>
-    <div class="buttons m-3">
-      <button class="button is-info" :class="{ 'is-loading': loading }" @click="submit" :disabled="!app.name">提交</button>
-      <button class="button is-danger" @click="remove"  :class="{ 'is-loading': loading }">删除</button>
+    <p class="ml-3" v-if="loading">Loading...</p>
+    <div class="m-3" v-else>
+      <button class="text-white rounded px-4 py-2 text-sm" :class="[app.name ? 'bg-blue-500' : 'bg-gray-500']" @click="submit" :disabled="!app.name">提交</button>
+      <button class="bg-red-500 text-white rounded px-4 py-2 text-sm ml-3" @click="remove">删除</button>
     </div>
-    <p class="m-3">只有<b>刷新</b>secret或者RSA密钥对以后，才可以查看最新secret或sk。关闭此页后将无法再次查看!</p>
+    <p class="m-3 text-red-400">只有<b>刷新</b>secret或者RSA密钥对以后，才可以查看最新secret或sk。关闭此页后将无法再次查看!</p>
     <input type="hidden" id="pk" :value="app.pk">
     <input type="hidden" id="sk" :value="app.sk">
     <input type="hidden" id="secret" :value="app.secret">
-    <div class="buttons m-2">
-      <button class="button is-success is-light mb-2" v-if="app.pk" @click="copy('#pk')">点击复制public key</button>
-      <button class="button is-warning is-light mb-2" v-if="app.sk" @click="copy('#sk')">点击复制private key</button>
-      <button class="button is-danger is-light mb-2" v-if="app.secret" @click="copy('#secret')">点击复制secret</button>
+    <div class="m-2 font-bold">
+      <button class="m-2 text-blue-600 bg-blue-100 py-2 px-3 rounded border border-blue-600" v-if="app.pk" @click="copy('#pk')">点击复制public key</button>
+      <button class="m-2 text-red-600 bg-red-100 py-2 px-3 rounded border border-red-600" v-if="app.sk" @click="copy('#sk')">点击复制private key</button>
+      <button class="m-2 text-red-600 bg-red-100 py-2 px-3 rounded border border-red-600" v-if="app.secret" @click="copy('#secret')">点击复制secret</button>
     </div>
   </div>
 </template>

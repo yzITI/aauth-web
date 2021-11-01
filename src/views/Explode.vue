@@ -24,9 +24,8 @@ else axios.get('/auth/' + id, { headers: { token: SS[id] } })
   })
   .catch(err => {
     tip = err.response ? err.response.data : '网络错误'
-    delete SS[id]
-    delete LS[id]
-    console.log('Auto login failed for ' + id, LS[id])
+    SS.removeItem(id)
+    LS.removeItem(id)
     if (route.query.remember) setTimeout(() => { router.push('/launch/' + id) }, 800)
   })
 </script>
