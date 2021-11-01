@@ -6,7 +6,7 @@
         <img alt="logo" :src="app.icon || '/logo.png'" onerror="this.src = '/logo.png'" class="w-20 h-20 mx-1">
         <h1>{{ app.name }}</h1>
       </div>
-      <p v-if="pts.length" class="mt-3 mb-4">请选择一种登录方式</p>
+      <p class="mt-3 mb-4">{{ pts ? '请选择登录平台' : '正在跳转登录...' }}</p>
       <div>
         <div class="flex items-center shadow-md my-4 py-2 px-5 cursor-pointer w-80 bg-white transition hover:shadow-xl" v-for="p in pts" @click="go(p)">
           <img :src="p.icon" class="h-10 mx-4">
@@ -35,7 +35,7 @@ const pts = computed(() => {
   }
   if (res.length === 1) {
     setTimeout(() => { go(res[0]) }, 1000)
-    return []
+    return null
   } else return res
 })
 
