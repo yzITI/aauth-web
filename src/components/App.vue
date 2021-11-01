@@ -1,12 +1,8 @@
 <template>
-  <div class="m-2 w-screen">
-    <div class="m-3">
-      <label class="inline-block w-12">id: </label>
-      <input class="px-2 py-1 w-2/3 focus:ring-2" type="text" readonly="true" :value="app.id">
-    </div>
+  <div class="m-2 w-11/12">
     <div class="m-3" v-for="(n, p) in properties">
       <label class="inline-block w-12">{{ n[0] }}：</label>
-      <input class="px-2 py-1 w-2/3 focus:ring-2" type="text" v-model="app[p]" :placeholder="n[1]">
+      <input class="px-2 py-1 w-3/4 focus:ring-2" type="text" v-model="app[p]" :placeholder="n[1]">
     </div>
     <label class="ml-3">
       <input type="checkbox" v-model="app.updateSecret">
@@ -43,7 +39,7 @@ let app = $ref(props.app)
 watchEffect(() => { app = props.app })
 
 const properties = {
-  name: ['名称', '应用名称'],
+  name: ['名称', '应用名称（必填）'],
   icon: ['图标', '图片链接地址'],
   redirect: ['跳转', '登录跳转地址'],
   platforms: ['平台', '允许登录的平台，默认全部允许'],

@@ -6,11 +6,11 @@
         <img alt="logo" :src="app.icon || '/logo.png'" onerror="this.src = '/logo.png'" class="w-20 h-20 mx-1">
         <h1>{{ app.name }}</h1>
       </div>
-      <p class="mt-3 mb-4">请选择一种登录方式</p>
+      <p v-if="pts.length" class="mt-3 mb-4">请选择一种登录方式</p>
       <div>
         <div class="flex items-center shadow-md my-4 py-2 px-5 cursor-pointer w-80 bg-white transition hover:shadow-xl" v-for="p in pts" @click="go(p)">
           <img :src="p.icon" class="h-10 mx-4">
-          <h2 class="text-2xl font-bold" :style="{ color: p.color }">{{ p.name }}</h2>
+          <h2 class="text-xl font-bold" :style="{ color: p.color }">{{ p.name }}</h2>
         </div>
       </div>
     </template> 
@@ -33,7 +33,10 @@ const pts = computed(() => {
   for (const p of app.platforms.split(',')) {
     if (platforms[p]) res.push(platforms[p])
   }
-  return res
+  if (res.length === 1) {
+    setTimeout(() => { go(res[0]) }, 1000)
+    return []
+  } else return res
 })
 
 const SS = window.sessionStorage, LS = window.localStorage

@@ -1,43 +1,14 @@
-<template>
-  <div class="admin">
-    <h1 v-if="!apps" class="title m-4">正在载入...</h1>
-    <div v-else class="main" :style="mainStyle">
-      <div class="list p-2">
-        <h2 class="title is-4 m-3">应用列表</h2>
-        <button class="button is-info is-outlined is-fullwidth is-small" @click="select()">创建应用</button>
-        <div class="app m-2" v-for="(a, id) in apps" @click="select(id)">
-          <img style="max-width: 1.8rem; max-height: 1.8rem;" :src="a.icon || '/logo.png'" onerror="this.src = '/logo.png'">
-          <h3 class="title is-6 ml-2">{{ a.name }}</h3>
-        </div>
-      </div>
-      <div class="edit p-2">
-        <div style="min-width: 300px;">
-          <h1 class="title m-3">
-            <i v-if="width <= 640" class="mdi mdi-24px mdi-menu" @click="open = !open"></i>
-            {{ edit ? '应用管理' : ''}}
-          </h1>
-          <app v-if="edit" :app="edit" @upsert="upsert" @remove="remove"></app>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
-import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+const route = useRoute(), router = useRouter()
 import axios from '../plugins/axios.js'
 import App from '../components/App.vue'
-const route = useRoute(), router = useRouter()
+
+let apps = $ref(null)
+let selected = $ref('')
 
 const SS = window.sessionStorage
 const token = () => ({ headers: { token: SS.aauth } })
-let apps = $ref(null)
-let edit = $ref(null)
-let open = $ref(true)
-const width = window.innerWidth
-const mainStyle = computed(() => (open || width > 640) ? '' : 'width: calc(100% + 240px); left: -240px;')
-
 function catchErr (e) {
   console.log(e)
   Swal.fire('错误', e.response ? e.response.data : '网络错误', 'error')
@@ -51,63 +22,29 @@ else {
     .catch(catchErr)
 }
 
-function randomString(e = 10) {
-  const t = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnoprstuvwxyz1234567890'
-  let n = ''
-  for (let i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * 62))
-  return n
+function upsert (a) {
+  apps[selected] = a
 }
 
-window.add = id => {
-  edit = { id }
-  open = false
+function remove ({ id }) {
+  delete apps[id]
 }
 
-function select (id) {
-  edit = id ? ({...apps[id]}) : ({ id: randomString() })
-  open = false
-}
-
-function upsert (app) {
-  delete app.secret
-  delete app.sk
-  apps[app.id] = app
-}
-
-function remove (app) {
-  console.log(app)
-  delete apps[app.id]
-  edit = null
+window.add = (id) => {
+  apps[id] = {}
+  selected = id
 }
 </script>
 
-<style scoped>
-div.main {
-  position: relative;
-  left: 0;
-  display: flex;
-  width: 100%;
-  height: 100%;
-  transition: all 0.5s ease;
-}
-div.list {
-  min-width: 240px;
-  width: 240px;
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-div.app {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-div.edit {
-  position: relative;
-  background-color: #f1f2f3;
-  flex-grow: 1;
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-</style>
+<template>
+  <div class="bg-gray-100 min-h-screen w-screen flex flex-col items-center pt-10">
+    <p v-if="!apps">Loading...</p>
+    <div v-else class="flex items-center w-5/6">
+      <img v-if="selected" alt="logo" :src="apps[selected].icon || '/logo.png'" onerror="this.src = '/logo.png'" class="w-20 h-20">
+      <select v-model="selected" class="border border-blue-600 m-5">
+        <option v-for="(v, k) in apps" :value="k" :key="k">{{ v.name }} ({{ k }})</option>
+      </select>
+    </div>
+    <app v-if="selected" :app="apps[selected]" @upsert="upsert" @remove="remove"></app>
+  </div>
+</template>
