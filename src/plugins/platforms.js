@@ -34,7 +34,7 @@ export default {
     color: 'black',
     icon: '/platforms/XYZSAS.svg',
     go: (app, state) => {
-      window.location.href = 'http://sas.yzzx.org/#/login?c=AAUTH&state=XYZSAS$$' + app + '$$' + state
+      window.location.href = 'https://sas.yzzx.org/#/login?c=AAUTH&state=XYZSAS$$' + app + '$$' + state
     }
   }
 }

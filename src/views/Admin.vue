@@ -31,7 +31,7 @@ function remove ({ id }) {
 }
 
 window.add = (id) => {
-  apps[id] = {}
+  apps[id] = { id }
   selected = id
 }
 </script>
