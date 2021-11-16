@@ -10,6 +10,23 @@ Aauth is a universal authentication system. One app may use Aauth in the followi
 2. Aauth Login with `code`
 3. Aauth Login with `token`
 
+## jwt
+style 
+```javascript
+{
+  ":": "[{'#':'clubdata','_':'?','!':0,':':{'${id}':1}}]", // data ${v} will be replaced by v in the "?" session
+  "?": ["id"], //
+  'nbf': timestamp, // (optional) jwt invalid before this timestamp
+  'exp': timestamp // (optional) jwt invalid before this timestamp
+}
+```
+
+Algorithm
+Using PS256
+
+## window.open
+Using `window.open()` method to open Aauth in a new window, the original window will receive related message sent by `window.postMessage()`. And the new window will close automatically. To receive the message, the original window can use `window.addEventListener("message", e => {})`
+
 ## RSA Key Management
 
 By default, App has `id`, `secret`, and a pair of RSA keys (`sk` and `pk`).
