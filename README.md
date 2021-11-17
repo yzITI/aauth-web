@@ -10,6 +10,7 @@ Aauth is a universal authentication system. One app may use Aauth in the followi
 2. Aauth Login with `code`
 3. Aauth Login with `token`
 
+
 ## RSA Key Management
 
 By default, App has `id`, `secret`, and a pair of RSA keys (`sk` and `pk`).
@@ -22,10 +23,12 @@ By default, App has `id`, `secret`, and a pair of RSA keys (`sk` and `pk`).
 ## Aauth Login
 
 ### Step 1: Frontend Entry
-
 ```
 https://cn.aauth.link/#/launch/:APPID[?state=STATE]
 ```
+or 
+
+Using `window.open()` method to open above Aauth url in a new window
 
 ### Step 2: User Login
 
@@ -39,11 +42,27 @@ Currently support:
 
 User is redirected to the `redirect` as in the App settings, with some parameters `?[code=CODE|token=TOKEN][&state=STATE]`
 
-- If `token` template is set, `token` will be generated with `sk` of the App
+- If `token` is set, `token` will be signed with `sk` of the App
 - Otherwise, one-time `code` will be generated
 - `state` from Step 1 will be attached
 
+> `token` is a Json Web Token (JWT), signed with PS256 and including following fields:
+> ```js
+> {
+>   iat: Date.now(),
+>   iss: 'aauth',
+>   // other fields like id specified in token
+>   // For example, if token: 'id,name',
+>   id: 'user id',
+>   name: 'user name'
+> }
+
+
+If you have used `window.open()` in step1, the original window will receive related message sent by `window.postMessage()`. And the new window will close automatically. To receive the message, the original window can use the event listener `window.addEventListener("message", e => {})`
+
 ### Step 4: Backend `code` Confirmation
+
+> When using `token`, please ignore this step.
 
 POST `https://cn.api.aauth.link/auth/` with following body parameters:
 ```js
