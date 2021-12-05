@@ -3,13 +3,14 @@ export default {
     name: '钉钉',
     color: '#1877f2',
     icon: '/platforms/dingtalk.png',
-    go: (app, state) => {
+    qrcode: true,
+    go: (app, state, qrcode) => {
       if (navigator.userAgent.includes('DingTalk')) {
         window.location.href = 'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=dingoaprellztzihaw4y82&response_type=code&scope=snsapi_auth&redirect_uri=https%3A%2F%2Fcn.aauth.link%2Freenter.html&state=DINGTALK$$' + app + '$$' + state
       } else {
-        window.location.href = window.innerWidth < 800
-          ? 'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=dingoaprellztzihaw4y82&response_type=code&scope=snsapi_login&redirect_uri=https%3A%2F%2Fcn.aauth.link%2Freenter.html&state=' + state
-          : 'https://oapi.dingtalk.com/connect/qrconnect?appid=dingoaprellztzihaw4y82&response_type=code&scope=snsapi_login&redirect_uri=https%3A%2F%2Fcn.aauth.link%2Freenter.html&state=DINGTALK$$' + app + '$$' + state
+        window.location.href = qrcode
+          ? 'https://oapi.dingtalk.com/connect/qrconnect?appid=dingoaprellztzihaw4y82&response_type=code&scope=snsapi_login&redirect_uri=https%3A%2F%2Fcn.aauth.link%2Freenter.html&state=DINGTALK$$' + app + '$$' + state
+          : 'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=dingoaprellztzihaw4y82&response_type=code&scope=snsapi_login&redirect_uri=https%3A%2F%2Fcn.aauth.link%2Freenter.html&state=DINGTALK$$' + app + '$$' + state
       }
     }
   },

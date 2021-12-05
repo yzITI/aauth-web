@@ -8,9 +8,12 @@
       </div>
       <p class="mt-3 mb-4">{{ pts ? '请选择登录平台' : '正在跳转登录...' }}</p>
       <div>
-        <div class="flex items-center shadow-md my-4 py-2 px-5 cursor-pointer w-80 bg-white transition hover:shadow-xl" v-for="p in pts" @click="go(p)">
-          <img :src="p.icon" class="h-10 mx-4">
-          <h2 class="text-xl font-bold" :style="{ color: p.color }">{{ p.name }}</h2>
+        <div class="flex items-center justify-between shadow-md my-4 py-2 px-5 cursor-pointer w-80 bg-white transition hover:shadow-xl" v-for="p in pts" @click="go(p)">
+          <div class="flex items-center">
+            <img :src="p.icon" class="h-10 mx-4">
+            <h2 class="text-xl font-bold" :style="{ color: p.color }">{{ p.name }}</h2>
+          </div>
+          <qrcode-icon class="w-8 opacity-50 cursor-pointer" v-if="p.qrcode" @click.stop="go(p, 1)"></qrcode-icon>
         </div>
       </div>
     </template> 
@@ -20,6 +23,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { QrcodeIcon } from '@heroicons/vue/solid'
 import axios from '../plugins/axios.js'
 import platforms from '../plugins/platforms.js'
 const route = useRoute(), router = useRouter()
@@ -52,8 +56,8 @@ if (SS[id] || LS[id]) {
     tip = err.response ? err.response.data.toString() : '网络错误'
   })
 
-function go (p) {
+function go (p, qrcode) {
   if (!app) return
-  p.go(id, state)
+  p.go(id, state, qrcode)
 }
 </script>
