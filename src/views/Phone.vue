@@ -22,11 +22,10 @@ async function autoCheck () {
     phoneNumberServer.checkAuthAvailable({ phoneNumber: input, accessToken: res.AccessToken, jwtToken: res.JwtToken, success: resolve, error: reject })
   }).then(() => true).catch(() => false)
   if (!res) return
-  await Swal.fire('鉴权成功')
+  await Swal.fire('认证成功', '正在尝试使用本机号码认证...', 'success')
   res = await new Promise((resolve, reject) => {
     phoneNumberServer.getVerifyToken({ success: resolve, error: reject })
   }).catch(() => false)
-  await Swal.fire(JSON.stringify(res))
   if (!res) return
   res = await axios.put('/phone/' + input, { spToken: res.spToken })
     .then(r => {
@@ -66,6 +65,7 @@ async function next () {
         type="text" v-model="input" @keyup.enter="next"
       >
       <button @click="next"><arrow-circle-right-icon class="w-12 h-12 transition" :class="input.length == (number ? 6 : 11) ? 'text-blue-500' : 'text-gray-300'"/></button>
+      <div class="text-sm text-gray-300 absolute right-1 bottom-1">在流量环境下可一键认证</div>
     </div>
   </div>
 </template>

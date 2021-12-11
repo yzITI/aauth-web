@@ -39,7 +39,7 @@ export default {
     }
   },
   PHONE: {
-    name: '手机号登录',
+    name: '手机号',
     color: 'black',
     icon: '/platforms/phone.svg',
     go: (app, state) => {
