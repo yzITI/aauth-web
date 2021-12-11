@@ -3,7 +3,10 @@ import { watch } from 'vue'
 import OverlayLoading from '../components/OverlayLoading.vue'
 import { ArrowCircleRightIcon } from '@heroicons/vue/solid'
 import { useRouter, useRoute } from 'vue-router'
+import { PhoneNumberServer } from 'aliyun_numberauthsdk_web'
 import axios from '../plugins/axios.js'
+
+const phoneNumberServer = new PhoneNumberServer()
 
 const router = useRouter(), route = useRoute()
 let loading = $ref(false), input = $ref(''), number = $ref('')
@@ -11,6 +14,26 @@ let loading = $ref(false), input = $ref(''), number = $ref('')
 watch($$(input), v => {
   input = v.replace(/[^0-9]/g, '')
 })
+
+async function autoCheck () {
+  let res = await axios.delete('/phone').then(r => r.data).catch(() => false)
+  if (!res) return false
+  res = new Promise((resolve, reject) => {
+    phoneNumberServer.checkAuthAvailable({ phoneNumber: input, accessToken: res.AccessToken, jwtToken: res.JwtToken, success: resolve, error: reject })
+  }).then(() => true).catch(() => false)
+  if (!res) return
+  res = await new Promise((resolve, reject) => {
+    phoneNumberServer.getVerifyToken({ success: resolve, error: reject })
+  }).then(r => r.spToken).catch(() => false)
+  if (!res) return
+  res = await axios.put('/phone/' + input, { spToken: res })
+    .then(r => {
+      router.push(`/land?code=${r.data}&state=${route.query.state}`)
+      return true
+    })
+    .catch(() => false)
+  return res
+}
 
 async function next () {
   loading = true
@@ -21,6 +44,7 @@ async function next () {
     number = ''
     input = ''
   } else {
+    if (await autoCheck()) return
     await axios.get('/phone/' + input)
       .then(() => { number = input })
       .catch(err => Swal.fire('错误', err.response ? err.response.data : '网络错误', 'error'))
