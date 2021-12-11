@@ -22,11 +22,13 @@ async function autoCheck () {
     phoneNumberServer.checkAuthAvailable({ phoneNumber: input, accessToken: res.AccessToken, jwtToken: res.JwtToken, success: resolve, error: reject })
   }).then(() => true).catch(() => false)
   if (!res) return
+  await Swal.fire('鉴权成功')
   res = await new Promise((resolve, reject) => {
     phoneNumberServer.getVerifyToken({ success: resolve, error: reject })
-  }).then(r => r.spToken).catch(() => false)
+  }).catch(() => false)
+  await Swal.fire(JSON.stringify(res))
   if (!res) return
-  res = await axios.put('/phone/' + input, { spToken: res })
+  res = await axios.put('/phone/' + input, { spToken: res.spToken })
     .then(r => {
       router.push(`/land?code=${r.data}&state=${route.query.state}`)
       return true
