@@ -18,6 +18,10 @@ const routes = [
     component: () => import('./views/Explode.vue')
   },
   {
+    path: '/phone',
+    component: () => import('./views/Phone.vue')
+  },
+  {
     path: '/admin',
     component: () => import('./views/Admin.vue')
   }

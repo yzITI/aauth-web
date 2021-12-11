@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, watchEffect } from 'vue'
+import { watchEffect } from 'vue'
 import axios from '../plugins/axios.js'
 const props = defineProps(['app'])
 const emit = defineEmits(['upsert', 'remove'])

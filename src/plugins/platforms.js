@@ -37,5 +37,13 @@ export default {
     go: (app, state) => {
       window.location.href = 'https://sas.yzzx.org/#/login?c=AAUTH&state=XYZSAS$$' + app + '$$' + state
     }
+  },
+  PHONE: {
+    name: '手机号登录',
+    color: 'black',
+    icon: '/platforms/phone.svg',
+    go: (app, state) => {
+      window.location.href = './#/phone?state=PHONE$$' + app + '$$' + state
+    }
   }
 }

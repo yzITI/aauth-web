@@ -37,7 +37,8 @@ window.add = (id) => {
 </script>
 
 <template>
-  <div class="bg-gray-100 min-h-screen w-screen flex flex-col items-center pt-10">
+  <div class="bg-gray-100 min-h-screen w-screen flex flex-col p-10">
+    <h1 class="text-3xl font-bold mb-5">Aauth 应用管理</h1>
     <p v-if="!apps">Loading...</p>
     <div v-else class="flex items-center w-5/6">
       <img v-if="selected" alt="logo" :src="apps[selected].icon || '/logo.png'" onerror="this.src = '/logo.png'" class="w-20 h-20">
