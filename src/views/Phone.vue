@@ -18,7 +18,6 @@ watch($$(input), v => {
 async function autoCheck () {
   let res = await axios.delete('/phone').then(r => r.data).catch(() => false)
   if (!res) return false
-  res = {"JwtToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjAyMjBfcG5zX3VuaXFfa2V5In0.eyJqdGkiOiJyWTFFZWFRckNneGk2bXlBczdFY1NnIiwiaWF0IjoxNjM5MzcwOTYwLCJleHAiOjE2MzkzNzQ1NjAsIm5iZiI6MTYzOTM3MDkwMCwic3ViIjoiWU9VUl9TVUJKRUNUIiwiYXVkIjoiWU9VUl9BVURJRU5DRSIsImFsaVVpZCI6IjE2MzYyOTMyNjk4MzExMzcifQ.RUD12D9D3Ur5neOs0L3T5-Cnq8JYl4w_uf8XHHVt3axf7kWJ_9TN89W3ugqyJ0Dhyd0oZrxNFlWfs2ovNWSyvpgmQs2e5tx12v_kxv4KyD6kjAu-ezLItPmsNL_rvmc4grhjdEW4XH-sOu_smMk6PjvI9bvPii9gzndPMvpxIVI4G-zON8w45zndPiaP9Lpdhkoiq024lNQpM0-z9_K59WiF_x0xcfv_7csqwk5l8hrck86d9bOrR-jI63WQ_YexCSDtG_X_iI5BX8A2bhqQtncfn-UcRpip5UMY2pwmkyqSMwnxXpHoAkLU9rms-IB0HdF7otlFirqinAOaC1Xyfw", "AccessToken": "iBDdhDJEbVlZ7Q4/4JHKhaGJIBSwVxzMMx4+KTtwvjZ2hYunwDSQR2qur5mEp1N0YAf2It0WOqQ="}
   res = await new Promise((resolve, reject) => {
     phoneNumberServer.checkAuthAvailable({ phoneNumber: input, accessToken: res.AccessToken, jwtToken: res.JwtToken, success: resolve, error: reject })
   }).then(() => true).catch(() => false)
