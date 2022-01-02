@@ -27,15 +27,19 @@ import { QrcodeIcon } from '@heroicons/vue/solid'
 import axios from '../plugins/axios.js'
 import platforms from '../plugins/platforms.js'
 const route = useRoute(), router = useRouter()
-const id = route.params.id, state = route.query.state || ''
+const id = route.params.id, state = route.query.state || '', queryPts = route.query.platforms || ''
 
 let app = $ref(null)
 let tip = $ref('正在载入应用信息')
 const pts = computed(() => {
-  if (!app || !app.platforms) return platforms
+  if (!app) return []
+  let qPts = Object.keys(platforms)
+  if (queryPts) qPts = queryPts.replace(/\s/g, '').split(',')
+  let aPts = Object.keys(platforms)
+  if (app.platforms) aPts = app.platforms.replace(/\s/g, '').split(',')
   const res = []
-  for (const p of app.platforms.split(',')) {
-    if (platforms[p]) res.push(platforms[p])
+  for (const p in platforms) {
+    if (qPts.includes(p) && aPts.includes(p)) res.push(platforms[p])
   }
   if (res.length === 1) {
     setTimeout(() => { go(res[0]) }, 1000)
