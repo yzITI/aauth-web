@@ -18,7 +18,7 @@ const SS = window.sessionStorage, LS = window.localStorage
 if (!SS[id]) router.push('/launch/' + id)
 if (route.query.remember) {
   tip = '准备尝试自动登录'
-  setTimeout(explode, 1000)
+  setTimeout(explode, 2000)
 } else explode()
 
 function abort () {
@@ -26,7 +26,7 @@ function abort () {
   tip = '用户放弃自动登录'
   SS.removeItem(id)
   LS.removeItem(id)
-  setTimeout(() => { router.push('/launch/' + id) }, 800)
+  setTimeout(() => { router.push('/launch/' + id) }, 1000)
 }
 
 async function explode () {
@@ -39,7 +39,7 @@ async function explode () {
       tip = err.response ? err.response.data : '网络错误'
       SS.removeItem(id)
       LS.removeItem(id)
-      setTimeout(() => { router.push('/launch/' + id) }, 800)
+      setTimeout(() => { router.push('/launch/' + id) }, 1000)
     })
 }
 
