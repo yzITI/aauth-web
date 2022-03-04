@@ -23,7 +23,7 @@ import axios from '../plugins/axios.js'
 import platforms from '../plugins/platforms.js'
 const route = useRoute(), router = useRouter()
 
-let tip = $ref('正在登录')
+let tip = $ref('正在验证您的身份')
 let user = $ref(null)
 let appName = $ref('')
 let remember = $ref(false)

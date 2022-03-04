@@ -6,7 +6,7 @@
         <img alt="logo" :src="app.icon || '/logo.png'" onerror="this.src = '/logo.png'" class="w-20 h-20 mx-1">
         <h1>{{ app.name }}</h1>
       </div>
-      <p class="mt-3 mb-4">{{ pts ? '请选择登录平台' : '正在跳转登录...' }}</p>
+      <p class="mt-3 mb-4">{{ pts ? '请选择登录平台' : '正在前往登录平台...' }}</p>
       <div>
         <div class="flex items-center justify-between shadow-md my-4 py-2 px-5 cursor-pointer w-80 bg-white transition hover:shadow-xl" v-for="p in pts" @click="go(p)">
           <div class="flex items-center">
@@ -41,10 +41,8 @@ const pts = computed(() => {
   for (const p in platforms) {
     if (qPts.includes(p) && aPts.includes(p)) res.push(platforms[p])
   }
-  if (res.length === 1) {
-    setTimeout(() => { go(res[0]) }, 1000)
-    return null
-  } else return res
+  if (res.length === 1) return go(res[0])
+  else return res
 })
 
 const SS = window.sessionStorage, LS = window.localStorage

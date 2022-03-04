@@ -1,14 +1,14 @@
 <template>
   <div class="h-screen w-screen flex flex-col justify-around items-center  bg-gray-100">
     <h1 class="text-3xl font-bold">{{ tip }}</h1>
-    <x-icon class="w-10 text-red-500 cursor-pointer transition-all duration-500" v-if="route.query.remember && canExplode" :class="showCross ? 'opacity-100' : 'opacity-0'" @click="abort" />
+    <x-circle-icon class="w-10 text-red-500 cursor-pointer transition-all duration-500" v-if="route.query.remember && canExplode" :class="showCross ? 'opacity-100' : 'opacity-0'" @click="abort" />
   </div> 
 </template>
 
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
 import axios from '../plugins/axios.js'
-import { XIcon } from '@heroicons/vue/solid'
+import { XCircleIcon } from '@heroicons/vue/solid'
 const route = useRoute(), router = useRouter()
 const id = route.params.id
 
@@ -23,16 +23,16 @@ if (route.query.remember) {
 
 function abort () {
   canExplode = false
-  tip = '用户放弃自动登录'
+  tip = '放弃自动登录'
   SS.removeItem(id)
   LS.removeItem(id)
-  setTimeout(() => { router.push('/launch/' + id) }, 1000)
+  router.push('/launch/' + id)
 }
 
 async function explode () {
   if (!canExplode) return
   canExplode = false
-  tip = '正在请求跳转'
+  tip = '正在获取用户凭证'
   axios.get('/auth/' + id, { headers: { token: SS[id] } })
     .then(resp => { go(resp.data) })
     .catch(err => {
@@ -44,6 +44,7 @@ async function explode () {
 }
 
 function go (data) {
+  tip = '正在前往应用'
   if (window.opener) {
     const msg = {}
     if (data.token) msg.token = data.token
