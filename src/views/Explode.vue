@@ -1,24 +1,23 @@
 <template>
   <div class="h-screen w-screen flex flex-col justify-around items-center  bg-gray-100">
     <h1 class="text-3xl font-bold">{{ tip }}</h1>
-    <x-circle-icon class="w-10 text-red-500 cursor-pointer transition-all duration-500" v-if="route.query.remember && canExplode" :class="showCross ? 'opacity-100' : 'opacity-0'" @click="abort" />
+    <button class="bg-red-700 rounded m-3 w-80 text-white px-5 py-2 font-bold" v-if="route.query.remember && canExplode" @click="abort">取消自动登录</button>
   </div> 
 </template>
 
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
 import axios from '../plugins/axios.js'
-import { XCircleIcon } from '@heroicons/vue/solid'
 const route = useRoute(), router = useRouter()
 const id = route.params.id
 
-let tip = $ref(''), showCross = $ref(true), canExplode = $ref(true)
+let tip = $ref(''), canExplode = $ref(true)
 const SS = window.sessionStorage, LS = window.localStorage
 
 if (!SS[id]) router.push('/launch/' + id)
 if (route.query.remember) {
   tip = '准备尝试自动登录'
-  setTimeout(explode, 2000)
+  setTimeout(explode, 2e3)
 } else explode()
 
 function abort () {

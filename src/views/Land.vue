@@ -7,7 +7,7 @@
         <p class="text-center">{{ platforms[user.platform].name }} 登录</p>
       </div>
       <div class="flex flex-col items-center">
-        <button class="bg-red-700 rounded m-3 w-80 text-white px-5 py-2" @click="jump">点击前往 {{ appName }}</button>
+        <button class="bg-red-700 rounded m-3 w-80 text-white px-5 py-2 font-bold" @click="jump">点击前往 {{ appName }}</button>
         <label>
           <input type="checkbox" v-model="remember">
           30天内自动登录此应用
