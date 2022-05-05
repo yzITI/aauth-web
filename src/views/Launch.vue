@@ -7,7 +7,7 @@
         <h1>{{ app.name }}</h1>
       </div>
       <p class="mt-3 mb-4">{{ pts ? '请选择登录平台' : '正在前往登录平台...' }}</p>
-      <wrapper :show="pts.length" class="py-1">
+      <wrapper :show="pts?.length" class="py-1">
         <div class="flex items-center justify-between shadow-md my-4 py-2 px-5 cursor-pointer w-80 bg-white transition hover:shadow-xl" v-for="p in pts" @click="go(p)">
           <div class="flex items-center">
             <div style="min-width: 4rem;">
@@ -23,7 +23,6 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Wrapper from '../components/Wrapper.vue'
 import { QrcodeIcon } from '@heroicons/vue/solid'
@@ -34,7 +33,7 @@ const id = route.params.id, state = route.query.state || '', queryPts = route.qu
 
 let app = $ref(null)
 let tip = $ref('正在载入应用信息')
-const pts = computed(() => {
+const pts = $computed(() => {
   if (!app) return []
   let qPts = Object.keys(platforms)
   if (queryPts) qPts = queryPts.replace(/\s/g, '').split(',')
