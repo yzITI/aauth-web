@@ -31,9 +31,10 @@ import platforms from '../plugins/platforms.js'
 const route = useRoute(), router = useRouter()
 const id = route.params.id, state = route.query.state || '', queryPts = route.query.platforms || ''
 
-let app = $ref(null)
+let app = $ref(null), gone = $ref(false)
 let tip = $ref('正在载入应用信息')
 const pts = $computed(() => {
+  if (gone) return false
   if (!app) return []
   let qPts = Object.keys(platforms)
   if (queryPts) qPts = queryPts.replace(/\s/g, '').split(',')
@@ -62,6 +63,7 @@ if (SS[id] || LS[id]) {
 
 function go (p, qrcode) {
   if (!app) return
+  gone = true
   p.go(id, state, qrcode)
 }
 </script>

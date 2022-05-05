@@ -40,12 +40,9 @@ window.add = (id) => {
   <div class="bg-gray-100 min-h-screen w-screen flex flex-col p-10">
     <h1 class="text-3xl font-bold mb-5">Aauth 应用管理</h1>
     <p v-if="!apps">Loading...</p>
-    <div v-else class="flex items-center w-5/6">
-      <img v-if="selected" alt="logo" :src="apps[selected].icon || '/logo.png'" onerror="this.src = '/logo.png'" class="w-20 h-20">
-      <select v-model="selected" class="border border-blue-600 m-5">
-        <option v-for="(v, k) in apps" :value="k" :key="k">{{ v.name }} ({{ k }})</option>
-      </select>
-    </div>
+    <select v-else v-model="selected" class="border roundedfoverlay px-4 py-2 font-bold m-5">
+      <option v-for="(v, k) in apps" :value="k" :key="k">{{ v.name }} ({{ k }})</option>
+    </select>
     <app v-if="selected" :app="apps[selected]" @upsert="upsert" @remove="remove"></app>
   </div>
 </template>

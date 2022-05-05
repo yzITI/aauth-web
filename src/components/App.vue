@@ -1,5 +1,6 @@
 <template>
   <div class="m-2 w-11/12">
+    <img alt="logo" :src="app.icon || '/logo.png'" onerror="this.src = '/logo.png'" class="w-20 h-20">
     <div class="m-3" v-for="(n, p) in properties">
       <label class="inline-block w-12">{{ n[0] }}：</label>
       <input class="px-2 py-1 w-3/4 focus:ring-2" type="text" v-model="app[p]" :placeholder="n[1]">
@@ -12,8 +13,7 @@
       <input type="checkbox" v-model="app.key">
       <span style="color: red; margin: 8px;">刷新RSA密钥对</span>
     </label>
-    <p class="ml-3" v-if="loading">Loading...</p>
-    <div class="m-3" v-else>
+    <div class="m-3">
       <button class="text-white rounded px-4 py-2 text-sm" :class="[app.name ? 'bg-blue-500' : 'bg-gray-500']" @click="submit" :disabled="!app.name">提交</button>
       <button class="bg-red-500 text-white rounded px-4 py-2 text-sm ml-3" @click="remove">删除</button>
     </div>
@@ -27,10 +27,12 @@
       <button class="m-2 text-red-600 bg-red-100 py-2 px-3 rounded border border-red-600" v-if="app.secret" @click="copy('#secret')">点击复制secret</button>
     </div>
   </div>
+  <overlay-loading :show="loading" />
 </template>
 
 <script setup>
 import { watchEffect } from 'vue'
+import OverlayLoading from './OverlayLoading.vue'
 import axios from '../plugins/axios.js'
 const props = defineProps(['app'])
 const emit = defineEmits(['upsert', 'remove'])
