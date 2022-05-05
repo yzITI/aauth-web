@@ -29,9 +29,9 @@ let appName = $ref('')
 let remember = $ref(false)
 let token
 const code = route.query.code
-const [platform, app, state] = route.query.state.split('$$')
-if (!code || !platform || !app) tip = '-_- 您似乎跑错啦！'
-axios.put('/auth/', { code, platform, app })
+const [platform, app, state] = (route.query.state || '').split('$$')
+if (!code || !platform || !app) tip = '-_- 跑错啦！'
+else axios.put('/auth/', { code, platform, app })
   .then(({ data }) => {
     user = data.info
     token = data.token
