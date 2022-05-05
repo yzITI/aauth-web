@@ -27,22 +27,29 @@ let tip = $ref('正在验证您的身份')
 let user = $ref(null)
 let appName = $ref('')
 let remember = $ref(false)
-let token
-const code = route.query.code
-const [platform, app, state] = (route.query.state || '').split('$$')
-if (!code || !platform || !app) tip = '-_- 跑错啦！'
-else axios.put('/auth/', { code, platform, app })
-  .then(({ data }) => {
-    user = data.info
-    token = data.token
-    appName = data.app
-    console.log('user id:', user.id)
-  })
-  .catch(err => {
+let token, state
+
+async function init () {
+  const code = route.query.code
+  let s = (route.query.state instanceof Array) ? route.query.state[0] : route.query.state
+  try {
+    s = s.split('$$')
+    if (s.length < 3) throw 1
+    state = s[2]
+  } catch { return tip = '-_- 跑错啦！' }
+  try {
+    const res = await axios.put('/auth/', { code, platform: s[0], app: s[1] })
+    user = res.data.info
+    token = res.data.token
+    appName = res.data.app
+    console.log('userid:', user.id)
+  } catch (err) {
     if (!err.response) tip = '网络错误'
     else if (err.response.status == 502) tip = '登录超时'
     else tip = err.response.data
-  })
+  }
+}
+init()
 
 function jump () {
   if (!token) return

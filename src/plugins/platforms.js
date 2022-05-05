@@ -38,6 +38,14 @@ export default {
       window.location.href = 'https://sas.yzzx.org/#/login?c=AAUTH&state=XYZSAS$$' + app + '$$' + state
     }
   },
+  CHAOXING: {
+    name: '超星',
+    color: '#B71C1C',
+    icon: '/platforms/chaoxing.png',
+    go: (app, state) => {
+      window.location.href = 'http://v1.chaoxing.com/loginInter/checkLogin?fid=117002&appId=0d156941306d4a508cae1aeeab0df0c5&refer=https%3A%2F%2Fcn.aauth.link%2Freenter.html%3Fstate%3DCHAOXING$$' + app + '$$' + state
+    }
+  },
   PHONE: {
     name: '手机号',
     color: 'black',
