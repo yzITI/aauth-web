@@ -27,7 +27,7 @@ let tip = $ref('正在验证您的身份')
 let user = $ref(null)
 let appName = $ref('')
 let remember = $ref(false)
-let token, state
+let token, state, app
 
 async function init () {
   const code = route.query.code
@@ -36,6 +36,7 @@ async function init () {
     s = s.split('$$')
     if (s.length < 3) throw 1
     state = s[2]
+    app = s[1]
   } catch { return tip = '-_- 跑错啦！' }
   try {
     const res = await axios.put('/auth/', { code, platform: s[0], app: s[1] })
