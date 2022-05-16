@@ -10,7 +10,7 @@
         <button class="bg-red-700 rounded m-3 w-80 text-white px-5 py-2 font-bold" @click="jump">点击前往 {{ appName }}</button>
         <label>
           <input type="checkbox" v-model="remember">
-          30天内自动登录此应用
+          14天内自动登录此应用
         </label>
       </div>
     </template>
@@ -19,7 +19,7 @@
 
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
-import axios from '../plugins/axios.js'
+import srpc from '../plugins/srpc.js'
 import platforms from '../plugins/platforms.js'
 const route = useRoute(), router = useRouter()
 
@@ -39,16 +39,13 @@ async function init () {
     app = s[1]
   } catch { return tip = '-_- 跑错啦！' }
   try {
-    const res = await axios.put('/auth/', { code, platform: s[0], app: s[1] })
-    user = res.data.info
-    token = res.data.token
-    appName = res.data.app
+    const res = await srpc.auth.land(code, s[1], s[0])
+    if (typeof res === 'string') return tip = res
+    user = res.info
+    token = res.token
+    appName = res.app
     console.log('userid:', user.id)
-  } catch (err) {
-    if (!err.response) tip = '网络错误'
-    else if (err.response.status == 502) tip = '登录超时'
-    else tip = err.response.data
-  }
+  } catch { tip = '登录超时' }
 }
 init()
 

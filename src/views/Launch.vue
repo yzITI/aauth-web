@@ -26,7 +26,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import Wrapper from '../components/Wrapper.vue'
 import { QrcodeIcon } from '@heroicons/vue/solid'
-import axios from '../plugins/axios.js'
+import srpc from '../plugins/srpc.js'
 import platforms from '../plugins/platforms.js'
 const route = useRoute(), router = useRouter()
 const id = route.params.id, state = route.query.state || '', queryPts = route.query.platforms || ''
@@ -52,13 +52,10 @@ const SS = window.sessionStorage, LS = window.localStorage
 if (SS[id] || LS[id]) {
   if (!SS[id]) SS[id] = LS[id]
   router.push(`/explode/${id}?state=${state}&remember=1`)
-} else axios.get('/app/' + id)
-  .then(({ data }) => {
-    if (!data.redirect) tip = '应用不支持登录'
-    else app = data
-  })
-  .catch(err => {
-    tip = err.response ? err.response.data.toString() : '网络错误'
+} else srpc.auth.launch(id)
+  .then(data => {
+    if (!data) return tip = '应用不存在'
+    app = data
   })
 
 function go (p, qrcode) {

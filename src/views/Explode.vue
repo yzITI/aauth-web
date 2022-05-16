@@ -7,7 +7,7 @@
 
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
-import axios from '../plugins/axios.js'
+import srpc from '../plugins/srpc.js'
 const route = useRoute(), router = useRouter()
 const id = route.params.id
 
@@ -32,14 +32,14 @@ async function explode () {
   if (!canExplode) return
   canExplode = false
   tip = '正在获取用户凭证'
-  axios.get('/auth/' + id, { headers: { token: SS[id] } })
-    .then(resp => { go(resp.data) })
-    .catch(err => {
-      tip = err.response ? err.response.data : '网络错误'
-      SS.removeItem(id)
-      LS.removeItem(id)
-      setTimeout(() => { router.push('/launch/' + id) }, 1000)
-    })
+  const res = await srpc.auth.explode(SS[id], id)
+  if (typeof res === 'string') {
+    setTimeout(() => { router.push('/launch/' + id) }, 1000)
+    SS.removeItem(id)
+    LS.removeItem(id)
+    return tip = res
+  }
+  go(res)
 }
 
 function go (data) {
@@ -49,12 +49,12 @@ function go (data) {
     if (data.token) msg.token = data.token
     if (data.code) msg.code = data.code
     if (route.query.state) msg.state = route.query.state
-    window.opener.postMessage(msg, data.redirect)
+    window.opener.postMessage(msg, data.url)
     setTimeout(window.close, 1000)
   } else {
     const type = data.token ? 'token' : 'code'
     const value = data.token || data.code
-    let url = `${data.redirect}?${type}=${value}`
+    let url = `${data.url}?${type}=${value}`
     if (route.query.state) url += '&state=' + route.query.state
     window.location.href = url
   }

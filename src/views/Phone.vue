@@ -4,7 +4,7 @@ import OverlayLoading from '../components/OverlayLoading.vue'
 import { ArrowCircleRightIcon } from '@heroicons/vue/solid'
 import { useRouter, useRoute } from 'vue-router'
 import { PhoneNumberServer } from 'aliyun_numberauthsdk_web'
-import axios from '../plugins/axios.js'
+import srpc from '../plugins/srpc.js'
 
 const phoneNumberServer = new PhoneNumberServer()
 
@@ -16,7 +16,7 @@ watch($$(input), v => {
 })
 
 async function autoCheck () {
-  let res = await axios.delete('/phone').then(r => r.data).catch(() => false)
+  let res = await srpc.phone.getToken()
   if (!res) return false
   res = await new Promise((resolve, reject) => {
     phoneNumberServer.checkAuthAvailable({ phoneNumber: input, accessToken: res.AccessToken, jwtToken: res.JwtToken, success: resolve, error: reject })
@@ -27,28 +27,24 @@ async function autoCheck () {
   }).catch(() => false)
   if (!res) return
   await Swal.fire('认证成功', '正在尝试使用本机号码认证...', 'success')
-  res = await axios.put('/phone/' + input, { spToken: res.spToken })
-    .then(r => {
-      router.push(`/land?code=${r.data}&state=${route.query.state}`)
-      return true
-    })
-    .catch(() => false)
+  res = await srpc.phone.verifyToken(input, res.spToken)
+  router.push(`/land?code=${res}&state=${route.query.state}`)
   return res
 }
 
 async function next () {
   loading = true
   if (number) {
-    await axios.post('/phone/' + number, { code: input })
-      .then(r => { router.push(`/land?code=${r.data}&state=${route.query.state}`) })
-      .catch(err => Swal.fire('错误', err.response ? err.response.data : '网络错误', 'error'))
+    const res = await srpc.phone.verifySMS(number, input)
+    if (res) router.push(`/land?code=${res}&state=${route.query.state}`)
+    else Swal.fire('错误', '验证码错误', 'error')
     number = ''
     input = ''
   } else {
     if (await autoCheck()) return
-    await axios.get('/phone/' + input)
-      .then(() => { number = input })
-      .catch(err => Swal.fire('错误', err.response ? err.response.data : '网络错误', 'error'))
+    const res = await srpc.phone.sendSMS(input)
+    if (res) Swal.fire('错误', res, 'error')
+    else number = input
     input = ''
   }
   loading = false
