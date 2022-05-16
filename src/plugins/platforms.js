@@ -30,14 +30,6 @@ export default {
       window.location.href = 'https://github.com/login/oauth/authorize?client_id=be701ef88116790b5964&state=GITHUB$$' + app + '$$' + state
     }
   },
-  XYZSAS: {
-    name: '学生事务系统',
-    color: 'black',
-    icon: '/platforms/XYZSAS.svg',
-    go: (app, state) => {
-      window.location.href = 'https://sas.yzzx.org/#/login?c=AAUTH&state=XYZSAS$$' + app + '$$' + state
-    }
-  },
   CHAOXING: {
     name: '超星',
     color: '#B71C1C',
