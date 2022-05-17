@@ -132,3 +132,5 @@ Payload { // JWT Payload
   name: 'name'
 }
 ```
+
+> Here is a [Nodejs SDK](./aauth.js).
