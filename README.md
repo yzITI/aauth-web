@@ -133,4 +133,17 @@ Payload { // JWT Payload
 }
 ```
 
-> Here is a [Nodejs SDK](./aauth.js).
+
+### Token SDK
+
+[./aauth.js](./aauth.js).
+
+```js
+const aauth = require('./aauth.js')
+
+// verify token with your appid and expire time(ms)
+const v = await aauth('jwt signed by aauth', 'appid', 86400e3)
+
+// if failed, v = false
+// if success, v = [JWT Payload Object]
+```
