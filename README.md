@@ -111,7 +111,7 @@ with the Response:
 }
 ```
 
-> To improve security, Aauth rotates the RSA key pairs every 14 days. A new key pair would be generated and the oldest one will be removed from this list. **Aauth always sign token with the latest key.**
+> To improve security, Aauth rotates the RSA key pairs every 20 days. A new key pair would be generated and the oldest one will be removed from this list. **Aauth always sign token with the middle key.**
 
 The `token` is always a JWT with the following structure:
 
