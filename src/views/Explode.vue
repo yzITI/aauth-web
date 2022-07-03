@@ -49,12 +49,13 @@ function go (data) {
     if (data.token) msg.token = data.token
     if (data.code) msg.code = data.code
     if (route.query.state) msg.state = route.query.state
-    window.opener.postMessage(msg, data.url)
+    const urls = data.url.split(',')
+    for (const url in urls) window.opener.postMessage(msg, url)
     setTimeout(window.close, 1000)
   } else {
     const type = data.token ? 'token' : 'code'
     const value = data.token || data.code
-    let url = `${data.url}?${type}=${value}`
+    let url = `${data.url.split(',')[0]}?${type}=${value}`
     if (route.query.state) url += '&state=' + route.query.state
     window.location.href = url
   }
