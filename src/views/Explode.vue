@@ -50,7 +50,7 @@ function go (data) {
     if (data.code) msg.code = data.code
     if (route.query.state) msg.state = route.query.state
     const urls = data.url.split(',')
-    for (const url in urls) window.opener.postMessage(msg, url)
+    for (const url of urls) window.opener.postMessage(msg, url)
     setTimeout(window.close, 1000)
   } else {
     const type = data.token ? 'token' : 'code'
