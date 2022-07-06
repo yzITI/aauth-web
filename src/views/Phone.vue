@@ -3,10 +3,9 @@ import { watch } from 'vue'
 import OverlayLoading from '../components/OverlayLoading.vue'
 import { ArrowCircleRightIcon } from '@heroicons/vue/solid'
 import { useRouter, useRoute } from 'vue-router'
-import { PhoneNumberServer } from 'aliyun_numberauthsdk_web'
 import srpc from '../plugins/srpc.js'
 
-const phoneNumberServer = new PhoneNumberServer()
+const phoneNumberServer = new window.PhoneNumberServer()
 
 const router = useRouter(), route = useRoute()
 let loading = $ref(false), input = $ref(''), number = $ref('')
