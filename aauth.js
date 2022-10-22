@@ -18,7 +18,7 @@ function verify (jwt) {
     const header = JSON.parse(Buffer.from(raw[0], 'base64url').toString())
     const pk = pks[header.kid]
     if (!pk) return false
-    if (!crypto.verify('rsa-sha256', Buffer.from(raw[0] + '.' + raw[1]), { key: crypto.createPublicKey(pk), padding: crypto.constants.RSA_PKCS1_PSS_PADDING, saltLength: crypto.constants.RSA_PSS_SALTLEN_DIGEST }, Buffer.from(raw[2], 'base64url'))) return false
+    if (!crypto.verify('rsa-sha256', Buffer.from(raw[0] + '.' + raw[1]), { key: crypto.createPublicKey({ key: pk, format: 'jwk' }), padding: crypto.constants.RSA_PKCS1_PSS_PADDING, saltLength: crypto.constants.RSA_PSS_SALTLEN_DIGEST }, Buffer.from(raw[2], 'base64url'))) return false
     return JSON.parse(Buffer.from(raw[1], 'base64url').toString())
   } catch { return false }
 }
