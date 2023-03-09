@@ -30,6 +30,6 @@ module.exports = async (token, aud, expire = 86400e3) => {
     pksExpire = Date.now() + 864000e3
   }
   const v = verify(token)
-  if (!v || v.iss !== 'aauth' || v.aud !== aud || v.iat + expire < Date.now()) return false
+  if (!v || v.iss !== 'aauth' || (aud && v.aud !== aud) || v.iat + expire < Date.now()) return false
   return v
 }

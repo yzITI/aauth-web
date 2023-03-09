@@ -1,12 +1,3 @@
 <template>
-  <router-view />
+  <RouterView></RouterView>
 </template>
-
-<style>
-* {
-  outline: none;
-}
-body {
-  margin: 0;
-}
-</style>

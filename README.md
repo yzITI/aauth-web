@@ -155,6 +155,7 @@ const aauth = require('./aauth.js')
 
 // verify token with your appid and expire time(ms)
 const v = await aauth('jwt signed by aauth', 'appid', 86400e3)
+// if appid is empty, then it is not checked
 
 // if failed, v = false
 // if success, v = [JWT Payload Object]

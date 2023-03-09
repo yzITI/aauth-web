@@ -1,7 +1,7 @@
 <script setup>
 import { watchEffect, nextTick } from 'vue'
 import OverlayLoading from './OverlayLoading.vue'
-import { TrashIcon, CheckIcon, KeyIcon } from '@heroicons/vue/outline'
+import { TrashIcon, CheckIcon, KeyIcon } from '@heroicons/vue/24/outline'
 import srpc from '../plugins/srpc.js'
 const props = defineProps(['app'])
 const emit = defineEmits(['put', 'del'])

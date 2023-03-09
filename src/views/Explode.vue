@@ -1,10 +1,3 @@
-<template>
-  <div class="h-screen w-screen flex flex-col justify-around items-center  bg-gray-100">
-    <h1 class="text-3xl font-bold">{{ tip }}</h1>
-    <button class="bg-red-700 rounded m-3 w-80 text-white px-5 py-2 font-bold" v-if="route.query.remember && canExplode" @click="abort">取消自动登录</button>
-  </div> 
-</template>
-
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
 import srpc from '../plugins/srpc.js'
@@ -61,3 +54,11 @@ function go (data) {
   }
 }
 </script>
+
+<template>
+  <div class="h-screen w-screen flex flex-col justify-around items-center  bg-gray-100">
+    <h1 class="text-3xl font-bold">{{ tip }}</h1>
+    <button class="bg-red-700 rounded m-3 w-80 text-white px-5 py-2 font-bold" v-if="route.query.remember && canExplode" @click="abort">取消自动登录</button>
+  </div> 
+</template>
+
