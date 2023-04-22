@@ -23,13 +23,13 @@ function verify (jwt) {
   } catch { return false }
 }
 
-module.exports = async (token, aud, expire = 86400e3) => {
+module.exports = async (token, aud, expire = 86400e3, app = true) => {
   if (!token) return false
   if (pksExpire < Date.now()) {
     pks = await getpks()
     pksExpire = Date.now() + 864000e3
   }
   const v = verify(token)
-  if (!v || v.iss !== 'aauth' || (aud && v.aud !== aud) || v.iat + expire < Date.now()) return false
+  if (!v || v.iss !== 'aauth' || (aud && v.aud !== aud) || v.iat + expire < Date.now() || (!app && v.app)) return false
   return v
 }

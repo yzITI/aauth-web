@@ -85,6 +85,7 @@ with the Response:
 {
   id: String, // unique user id
   name: String, // username or nickname
+  app: true, // app login as a virtual user
   platform: String, // login platform
   ... // other user properties, like email
 }
@@ -139,6 +140,7 @@ Payload { // JWT Payload
   iat: Date.now(),
   iss: 'aauth',
   aud: 'appid', // your app id
+  app: true, // app login as a virtual user
   // other fields specified in app.token
   // For example, if token: 'id,name',
   id: 'userid',
@@ -153,10 +155,12 @@ Here is an SDK for token verification [./aauth.js](./aauth.js).
 ```js
 const aauth = require('./aauth.js')
 
-// verify token with your appid and expire time(ms)
-const v = await aauth('jwt signed by aauth', 'appid', 86400e3)
-// if appid is empty, then it is not checked
+const jwt = 'jwt signed by aauth'
+const appid = 'your appid' // empty for ALL app
+const expire = 86400e3 // expiration length
+const allowApp = true // allow app login as virtual user
 
+const v = await aauth(jwt, appid, expire, allowApp)
 // if failed, v = false
-// if success, v = [JWT Payload Object]
+// if success, v = { JWT Payload Object }
 ```
