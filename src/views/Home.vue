@@ -11,8 +11,8 @@ const SS = window.sessionStorage
 async function root () {
   const input = await Swal.fire({ icon: 'question', input: 'password' })
   if (!input.value) return
-  const pwd = await sha256(input.value)
-  const res = await srpc.root(pwd)
+  const secret = await sha256(input.value)
+  const res = await srpc.auth.app('root', secret)
   if (!res) return
   const id = route.query.app || 'aauth'
   SS[id] = res
