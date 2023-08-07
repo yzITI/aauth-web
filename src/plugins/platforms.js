@@ -19,7 +19,7 @@ export default {
     color: '#B71C1C',
     icon: '/platforms/qq.png',
     go: (app, state) => {
-      window.location.href = 'https://graph.qq.com/oauth2.0/authorize?client_id=101907335&response_type=code&redirect_uri=https%3A%2F%2Fcn.aauth.link%2Freenter.html&state=QQ$$' + app + '$$' + state
+      window.location.href = 'https://graph.qq.com/oauth2.0/authorize?client_id=101907335&response_type=code&redirect_uri=https%3A%2F%2Fauth.njsc.ltd%2Freenter.html&state=QQ$$' + app + '$$' + state
     }
   },
   GITHUB: {
