@@ -8,7 +8,7 @@ const route = useRoute(), router = useRouter()
 const id = route.params.id, state = route.query.state || '', queryPts = route.query.platforms || ''
 
 let app = $ref(null), gone = $ref(false)
-let tip = $ref('正在载入应用信息')
+let tip = $ref('正在载入应用')
 const pts = $computed(() => {
   if (gone) return false
   if (!app) return []

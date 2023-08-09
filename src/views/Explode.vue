@@ -9,8 +9,8 @@ const SS = window.sessionStorage, LS = window.localStorage
 
 if (!SS[id]) router.push('/launch/' + id)
 if (route.query.remember) {
-  tip = '准备尝试自动登录'
-  setTimeout(explode, 2e3)
+  tip = '准备自动登录'
+  setTimeout(explode, 1e3)
 } else explode()
 
 function abort () {
@@ -27,7 +27,7 @@ async function explode () {
   tip = '正在获取用户凭证'
   const res = await srpc.auth.explode(SS[id], id)
   if (typeof res === 'string') {
-    setTimeout(() => { router.push('/launch/' + id) }, 1000)
+    setTimeout(() => { router.push('/launch/' + id) }, 300)
     SS.removeItem(id)
     LS.removeItem(id)
     return tip = res
