@@ -1,4 +1,4 @@
-let url = 'https://cn.api.aauth.link/srpc'
+let url = 'https://a.njsc.ltd/aauth'
 
 const getFunction = name => ((...args) => fetch(url, {
   method: 'POST', mode: 'cors', cache: 'no-cache',

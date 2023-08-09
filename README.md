@@ -18,7 +18,7 @@ Aauth is a universal authentication system. It supports multiple platforms, two 
 
 To start Aauth login flow, navigate user to the launch url:
 ```
-https://cn.aauth.link/#/launch/APPID[?state=STATE&platforms=PT1,PT2]
+https://auth.njsc.ltd/#/launch/APPID[?state=STATE&platforms=PT1,PT2]
 ```
 
 where
@@ -44,7 +44,7 @@ To receive the message, the original window can use the event listener
 ```js
 window.onmessage = e => {
   // check origin for security
-  if (e.origin !== 'https://cn.aauth.link') return
+  if (e.origin !== 'https://auth.njsc.ltd') return
   console.log(e.data)
   // { code, state } or { token, state }
 }
@@ -68,30 +68,44 @@ User will choose a platform and login through it. Platforms can be set by app se
 
 After authentication, Aauth will return to the `url` in the app settings with `code` information. (See Navigation for details)
 
-#### Step 4: Backend `code` Confirmation
+#### Step 4: Backend `code` Verification
 
-POST `https://cn.api.aauth.link/auth/` with following body parameters:
-```js
-{
-  code: String, // code from Step 3
-  app: String, // app id
-  secret: String // app secret
-}
-```
+> Aauth backend provides services through SRPC protocol described [here](https://github.com/yzITI/srpc).
 
-with the Response:
+Verify code from step 3 by calling
 ```js
-// Success
-{
+// appid, app secret, and code from step 3
+const user = await srpc.auth.code(appid, secret, code)
+// false: failure
+// User: success
+
+// User object
+User {
   id: String, // unique user id
   name: String, // username or nickname
   app: true, // app login as a virtual user
   platform: String, // login platform
   ... // other user properties, like email
 }
+```
 
-// Fail
-String // error message
+Or, via raw http protocol, send request to `https://a.njsc.ltd/aauth` via `POST` method with header `Content-Type: application/json` and the following body parameters:
+```js
+{
+  N: 'auth.code',
+  A: [appid, secret, code] // appid, app secret, and code from step 3
+}
+```
+
+with the response:
+```js
+{ // success
+  R: User{} // User object
+}
+
+{ // failure
+  R: false
+}
 ```
 
 ### `Token` Login
@@ -112,16 +126,33 @@ After authentication, Aauth will return to the `url` in the app settings with `t
 
 #### Step 4: Verify `token`
 
-The `token` is a JSON Web Token (JWT), signed with `PS256` algorithm with Aauth Private Key. You can verify the `token` with the **Aauth Public Keys**:
+The `token` is a JSON Web Token (JWT), signed with `PS256` algorithm with Aauth Private Key. You can verify the `token` with the **Aauth Public Keys**.
 
-GET `https://cn.api.aauth.link/auth/`
+> Aauth backend provides services through SRPC protocol described [here](https://github.com/yzITI/srpc).
 
-with the Response:
+Get Aauth Public keys:
+```js
+const pks = await srpc.auth.pk()
+
+// Pks object
+Pks {
+  'kid1': JWK{}, // key 1 (in JWK format)
+  'kid2': JWK{}, // key 2 (in JWK format)
+  'kid3': JWK{}  // key 3 (in JWK format)
+}
+```
+
+Or, via raw http protocol, send request to `https://a.njsc.ltd/aauth` via `POST` method with header `Content-Type: application/json` and the following body parameters:
 ```js
 {
-  'kid1': String, // key 1
-  'kid2': String, // key 2
-  'kid3': String  // key 3
+  N: 'auth.pk'
+}
+```
+
+with the response:
+```js
+{
+  R: Pks{} // Pks object
 }
 ```
 

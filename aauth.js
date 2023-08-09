@@ -3,11 +3,12 @@ const https = require('https'), crypto = require('crypto')
 let pks = {}, pksExpire = 0
 
 const getpks = () => new Promise((r, rej) => {
-  const req = https.request('https://cn.api.aauth.link/auth/', { method: 'GET' }, res => {
+  const req = https.request('https://a.njsc.ltd/aauth', { method: 'POST', headers: { 'Content-Type': 'application/json' } }, res => {
     let data = ''
     res.on('data', chunk => data += chunk)
-    res.on('end', () => { r(JSON.parse(data)) })
+    res.on('end', () => { r(JSON.parse(data).R) })
   })
+  req.write(JSON.stringify({ N: 'auth.pk' }))
   req.on('error', rej)
   req.end()
 })
