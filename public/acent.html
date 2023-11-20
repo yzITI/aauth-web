@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script defer async src="/lib/sweetalert2.all.min.js"></script>
+    <title>Acent</title>
+    <link rel="icon" href="/favicon.ico">
+    <style type="text/css">
+      .center {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      input {
+        border-radius: 0.5rem;
+        border: solid white;
+        outline: none;
+        padding: 1rem;
+        margin: 1rem 0;
+        text-align: center;
+        width: 320px;
+        font-family: monospace;
+        font-weight: bold;
+        color: white;
+        background: transparent;
+      }
+    </style>
+  </head>
+  <body style="margin: 0;">
+    <script type="text/javascript">
+      const $ = id => document.getElementById(id)
+      function decodeToken (token) {
+        let input = token?.split('.')[1]
+        if (!input) return {}
+        input = input.replace(/-/g, '+').replace(/_/g, '/')
+        const pad = input.length % 4
+        if (pad) input += new Array(5 - pad).join('=')
+        return JSON.parse(decodeURIComponent(atob(input).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')))
+      }
+      let token = ''
+      let balance = 0
+      const updateBalance = () => $('title').innerHTML = balance
+      async function init () {
+        const urlSearch = new URLSearchParams(window.location.search)
+        token = urlSearch.get('token')
+        const login = () => window.location.href = 'https://auth.njsc.ltd/#/launch/acent'
+        if (!token) return login()
+        const { id, name, iat } = decodeToken(token)
+        if (iat + 86400e3 < Date.now()) return login()
+        $('main').style = 'display: block;'
+        balance = await srpc.getBalance(token)
+        $('name').innerHTML = name
+        updateBalance(balance)
+        $('check').addEventListener('keyup', async e => {
+          if (e.key !== 'Enter') return
+          const check = $('check').value
+          const fail = () => {
+            $('check').value = ''
+            Swal.fire('Invalid Check', '', 'error')
+          }
+          if (check.length !== 43) return fail()
+          const res = await srpc.depositCheck(check, id)
+          if (!res) return fail()
+          Swal.fire('Deposit Check', 'Deposited: ' + res, 'success')
+          balance += res
+          updateBalance()
+        })
+        if (!urlSearch.get('pay')) return
+        $('pay').style = 'display: block;'
+        $('pay').addEventListener('keyup', async e => {
+          if (e.key !== 'Enter') return
+          const a = Math.ceil($('pay').value)
+          const fail = err => {
+            $('pay').value = ''
+            Swal.fire(err, '', 'error')
+          }
+          if (!a || isNaN(a) || a <= 0) return fail('Invalid Amount')
+          if (a > balance) return fail('Insufficient Balance')
+          const res = await srpc.getCheck(token, a)
+          if (!res) return fail('Fail to Get Check')
+          Swal.fire('New Check', `<b style="color: red;">Your check is in the textbox<br>Keep the check carefully!</b>`, 'success')
+          balance -= a
+          $('check').value = res
+          updateBalance()
+        })
+        console.log('Direct Transfer by transferTo(user, amount)')
+        window.transferTo = async (user, amount) => {
+          const res = await srpc.transfer(token, user, Math.ceil(amount))
+          if (!res) return Swal.fire('Transfer Failed', '', 'error')
+          Swal.fire('Transfer Succeeded', 'Transferred: ' + res, 'success')
+          balance -= res
+          updateBalance()
+        }
+      }
+      setTimeout(init, 100)
+      // srpc
+      let url = 'https://a.njsc.ltd/acent'
+      const getFunction = name => ((...args) => fetch(url, {
+        method: 'POST', mode: 'cors', cache: 'no-cache',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ N: name, A: args })
+      }).then(async r => {
+        if (r.status === 200) return (await r.json()).R
+        else throw (await r.text())
+      }))
+      const proxyGet = (target, prop) => {
+        const key = target.key, newKey = key ? key + '.' + prop : prop, f = getFunction(newKey)
+        f.key = newKey
+        return new Proxy(f, { get: proxyGet })
+      }
+      const srpc = new Proxy((endpoint = '/') => url = endpoint, { get: proxyGet })
+    </script>
+    <div style="width: 100%; height: 100vh; background: #222; color: white;" class="center">
+      <p id="name" style="margin: 0;"></p>
+      <h1 id="title" style="font-size: 3rem; margin: 1rem 0;">Acent</h1>
+      <div style="display: none;" id="main">
+        <p style="margin: 0 0 3rem;">Acent Balance</p>
+        <input type="text" id="check" placeholder="Enter to Deposit Check">
+        <input type="text" id="pay" style="display: none;" placeholder="Enter Amount to Get Check">
+      </div>
+    </div>
+  </body>
+</html>
