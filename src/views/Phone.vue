@@ -15,6 +15,8 @@ watch($$(input), v => {
 })
 
 async function autoCheck () {
+  const netType = phoneNumberServer.getConnection()
+  if (netType === 'Wi-Fi') return false
   let res = await srpc.phone.getToken()
   if (!res) return false
   res = await new Promise((resolve, reject) => {
