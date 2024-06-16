@@ -46,7 +46,7 @@ function go (p, qrcode) {
     <h3 v-if="!app" class="text-3xl font-bold">{{ tip }}</h3>
     <template v-else>
       <div class="text-3xl font-bold flex items-center justify-center">
-        <img alt="logo" :src="app.icon || '/logo.png'" onerror="this.src = '/logo.png'" class="w-20 h-20 mx-1">
+        <img alt="logo" :src="app.icon || '/logo.png'" onerror="this.src = '/logo.png'" class="w-20 h-20 mx-1 object-contain">
         <h1>{{ app.name }}</h1>
       </div>
       <p class="mt-3 mb-4">{{ pts ? '请选择登录平台' : '正在前往登录平台...' }}</p>
