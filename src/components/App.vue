@@ -86,7 +86,7 @@ function copySecret () {
 
 <template>
   <div class="m-2 w-11/12">
-    <img alt="logo" :src="app.icon || '/logo.png'" onerror="this.src = '/logo.png'" class="w-20 h-20">
+    <img alt="logo" :src="app.icon || '/logo.png'" onerror="this.src = '/logo.png'" class="object-contain w-20 h-20">
     <div class="m-3" v-for="(n, p) in properties">
       <label class="inline-block w-12">{{ n[0] }}：</label>
       <input class="px-2 py-1 w-3/4 focus:ring-2" type="text" v-model="app[p]" :placeholder="n[1]">

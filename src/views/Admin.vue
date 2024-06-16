@@ -43,7 +43,7 @@ function add () {
           <CheckIcon class="text-blue-500 w-8 cursor-pointer" @click="add" />
         </div>
         <div v-for="(v, k) in apps" class="flex items-center cursor-pointer m-2" @click="selected = k; showList = false">
-          <img alt="logo" :src="v.icon || '/logo.png'" onerror="this.src = '/logo.png'" class="w-7 h-7 mr-2">
+          <img alt="logo" :src="v.icon || '/logo.png'" onerror="this.src = '/logo.png'" class="object-contain w-7 h-7 mr-2">
           {{ v.name }} ({{ k }})
         </div>
       </div>
