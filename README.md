@@ -92,7 +92,7 @@ User {
 Or, via raw http protocol, send request to `https://a.njsc.ltd/aauth` via `POST` method with header `Content-Type: application/json` and the following body parameters:
 ```js
 {
-  N: 'auth.code',
+  N: ['auth', 'code'],
   A: [appid, secret, code] // appid, app secret, and code from step 3
 }
 ```
@@ -145,7 +145,8 @@ Pks {
 Or, via raw http protocol, send request to `https://a.njsc.ltd/aauth` via `POST` method with header `Content-Type: application/json` and the following body parameters:
 ```js
 {
-  N: 'auth.pk'
+  N: ['auth', 'pk'],
+  A: []
 }
 ```
 

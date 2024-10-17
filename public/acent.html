@@ -98,21 +98,24 @@
       }
       setTimeout(init, 100)
       // srpc
-      let url = 'https://a.njsc.ltd/acent'
-      const getFunction = name => ((...args) => fetch(url, {
-        method: 'POST', mode: 'cors', cache: 'no-cache',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ N: name, A: args })
-      }).then(async r => {
-        if (r.status === 200) return (await r.json()).R
-        else throw (await r.text())
-      }))
-      const proxyGet = (target, prop) => {
-        const key = target.key, newKey = key ? key + '.' + prop : prop, f = getFunction(newKey)
-        f.key = newKey
-        return new Proxy(f, { get: proxyGet })
+      const SRPC = () => {
+        let url = 'https://a.njsc.ltd/acent'
+        const getFunction = N => ((...A) => fetch(url, {
+          method: 'POST', mode: 'cors', cache: 'no-cache',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ N, A })
+        }).then(async r => {
+          if (r.status === 200) return (await r.json()).R
+          else throw (await r.text())
+        }))
+        const proxyGet = (target, key) => {
+          const N = target.N || [], newN = [...N, key], f = getFunction(newN)
+          f.N = newN
+          return new Proxy(f, { get: proxyGet })
+        }
+        return new Proxy((endpoint = '/') => url = endpoint, { get: proxyGet })
       }
-      const srpc = new Proxy((endpoint = '/') => url = endpoint, { get: proxyGet })
+      const srpc = SRPC()
     </script>
     <div style="width: 100%; height: 100vh; background: #222; color: white;" class="center">
       <p id="name" style="margin: 0;"></p>

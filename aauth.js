@@ -8,7 +8,7 @@ const getpks = () => new Promise((r, rej) => {
     res.on('data', chunk => data += chunk)
     res.on('end', () => { r(JSON.parse(data).R) })
   })
-  req.write(JSON.stringify({ N: 'auth.pk' }))
+  req.write(JSON.stringify({ N: ['auth', 'pk'], A: [] }))
   req.on('error', rej)
   req.end()
 })
